@@ -1,6 +1,5 @@
 # ✏️ html-element-whiteboard 📑
 Playground for HTML elements to be used in demonstrations
----
 
 
 
