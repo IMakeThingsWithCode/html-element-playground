@@ -1,4 +1,4 @@
-.modeChangeButton {
+.playgroundModeChangeButton {
     position: absolute;
     padding: 5px;
     margin: 10px;
@@ -7,27 +7,54 @@
     cursor: pointer;
 }
 
-.editingModeChangeButton {
-    right: 200px;
+.playgroundEditingModeChangeButton {
+    position: relative;
     margin-right: 15px;
+    height: min-content;
     font-size: large;
 }
 
-.playingModeChangeButton {
+.playgroundPlayingModeChangeButton {
     font-size: small;
 }
 
-.editingPane {
-    position: absolute;
-    right: 0px;
-    top:0px;
-    bottom:0px;
-    width: 200px; /* fix later when I add elements*/
+.playgroundEditingPane {
     border-left-color: black;
     border-left-width: 5px;
     border-left-style: double;
+    display: flex;
+    flex-direction: column;
+    width: min-content;
+    overflow: scroll;
 }
 
-body {
-    height: 100%;
+.playgroundEditModeSideBar {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    display: flex;
+}
+
+.playgroundAdd {
+    padding: 10px;
+    margin: 15px;
+    cursor: pointer;
+}
+
+.playgroundIcon {
+    font-size: x-large;
+    padding: 0px;
+    margin: 0px;
+}
+
+#playgroundWillLink {
+    text-decoration-line: underline;
+    text-decoration-style: wavy;
+    color: cadetblue;
+}
+
+#playgroundWillLink:hover {
+    text-decoration-style: dotted;
+    text-decoration-thickness: 0.3vh;
 }

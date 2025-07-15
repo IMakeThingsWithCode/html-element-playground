@@ -4,10 +4,11 @@ Playground for HTML elements to be used in demonstrations
 
 
 ### Todo
-- [ ] Prototype
+- [x] Prototype
   - [x] Two states, edit and play
-  - [ ] Basic moving and adding of elements
+  - [x] Basic moving and adding of elements
 - [ ] Element property editor
+- [ ] Images
 - [ ] Tools in edit mode (pen, laser pointer, etc.)
 - [ ] Settings
 - [ ] Themes
