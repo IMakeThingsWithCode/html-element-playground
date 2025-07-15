@@ -1,0 +1,129 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+
+.playgroundModeChangeButton {
+    position: absolute;
+    padding: 5px;
+    margin: 10px;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+}
+
+.playgroundEditingModeChangeButton {
+    position: relative;
+    margin-right: 15px;
+    height: min-content;
+    font-size: large;
+}
+
+.playgroundPlayingModeChangeButton {
+    font-size: small;
+}
+
+.playgroundEditingPane {
+    border-left-color: black;
+    border-left-width: 6px;
+    border-left-style: double;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    width: min-content;
+    padding-left: 3px;
+}
+
+.playgroundEditModeSideBar {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    display: flex;
+}
+
+.playgroundAdd {
+    padding: 5px;
+    margin: 15px;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 5px;
+    border: 2px black solid;
+}
+
+.playgroundIcon {
+    padding: 0px;
+    margin: 0px;
+    width: 32px;
+    height: 32px;
+}
+
+.playgroundAdd .playgroundIcon {
+    margin-bottom: -4px;
+}
+
+#playgroundWillLink {
+    text-decoration-line: underline;
+    text-decoration-style: wavy;
+    color: skyblue;
+}
+
+#playgroundWillLink:hover {
+    text-decoration-style: dotted;
+    text-decoration-thickness: 0.3vh;
+}
+
+#playgroundPropertyEditor {
+    height: 100%;
+    border-top: 3px black dashed;
+    border-bottom: 3px black dashed;
+}
+
+#playgroundPropertyEditor div {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+}
+
+#playgroundPropertyEditor div p {
+    padding-right: 10px;
+    margin: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+#playgroundPropertyEditor div input {
+    width: calc(100% - 10px);
+}
+
+#playgroundPropertyEditor button {
+    width: 100%;
+    cursor: pointer;
+}
+
+.center {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#playgroundPropertyEditor div button p {
+    padding-right: 0px;
+}
+
+#playgroundDeleteButton {
+    background-color: white;
+    font-size: medium;
+    border-radius: 5px;
+    border: 2px black solid;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.row button {
+    margin: 5px;
+}

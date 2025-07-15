@@ -10,8 +10,6 @@ Playground for HTML elements to be used in demonstrations
 - [ ] Element property editor
 - [ ] Images
 - [ ] Tools in edit mode (pen, laser pointer, etc.)
-- [ ] Settings
-- [ ] Themes
 - [ ] Scripting between elements
 - [ ] Importing/Exporting
 - [ ] Screen capturing
