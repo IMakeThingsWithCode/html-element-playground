@@ -92,6 +92,18 @@ function updatePropertyViewer() {
     const propertyViewer = document.getElementById('playgroundPropertyEditor');
     propertyViewer.innerHTML = '';
 
+    const deleteButton = document.createElement('button');
+    deleteButton.classList.add('buttonWithIcon');
+    deleteButton.innerHTML = '<img class="playgroundIcon" src="./resources/icon-remove-element.png"><p>Delete</p>';
+    deleteButton.id = 'playgroundDeleteButton';
+    deleteButton.onclick = () => {
+        playgroundElements.splice(Array.prototype.slice.call(lastSelected.parentElement.children).indexOf(lastSelected), 1);
+        updateView();
+        lastSelected = null;
+        document.getElementById('playgroundPropertyEditor').innerHTML = '';
+    }
+    propertyViewer.appendChild(deleteButton)
+
     const propertiesToHighlight = [
         { key: 'innerHTML', label: 'Text', canBeNull: false },
         { key: 'style.color', label: 'Color', canBeNull: true },
@@ -104,6 +116,9 @@ function updatePropertyViewer() {
         { key: 'style.rotate', label: 'Rotate', canBeNull: true }
         //    { key: 'attributes.onclick', label: 'On Click (JS)', canBeNull: true }
     ]
+
+    const propertiesColumn = document.createElement('div');
+    propertiesColumn.id = 'propertyColumn';
 
     propertiesToHighlight.forEach((p) => {
         const label = document.createElement('p');
@@ -121,22 +136,9 @@ function updatePropertyViewer() {
         const container = document.createElement('div');
         container.appendChild(label)
         container.appendChild(input)
-        propertyViewer.appendChild(container)
+        propertiesColumn.appendChild(container)
     })
-
-    const deleteButton = document.createElement('button');
-    deleteButton.innerHTML = 'Delete Element<img class="playgroundIcon" src="./resources/icon-remove-element.png">';
-    deleteButton.id = 'playgroundDeleteButton';
-    deleteButton.onclick = () => {
-        playgroundElements.splice(Array.prototype.slice.call(lastSelected.parentElement.children).indexOf(lastSelected), 1);
-        updateView();
-        lastSelected = null;
-        document.getElementById('playgroundPropertyEditor').innerHTML = '';
-    }
-    const container = document.createElement('div');
-    container.classList.add('center')
-    container.appendChild(deleteButton);
-    propertyViewer.appendChild(container)
+    propertyViewer.appendChild(propertiesColumn);
 }
 
 function addElement(tag, attributes = {}, innerHTML = "", selectElement = false) {

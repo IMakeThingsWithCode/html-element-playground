@@ -5,22 +5,26 @@ body {
 
 .playgroundModeChangeButton {
     position: absolute;
-    padding: 5px;
-    margin: 10px;
     top: 0px;
     right: 0px;
+    background-color: white;
+    border-radius: 5px;
+    border: 2px black solid;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    font-size: small;
 }
 
-.playgroundEditingModeChangeButton {
+#playgroundEditingModeChangeButton {
     position: relative;
     margin-right: 15px;
     height: min-content;
-    font-size: large;
+    margin: 15px;
 }
 
-.playgroundPlayingModeChangeButton {
-    font-size: small;
+#playgroundPlayingModeChangeButton {
+    margin: 15px
 }
 
 .playgroundEditingPane {
@@ -42,24 +46,30 @@ body {
     display: flex;
 }
 
-.playgroundAdd {
+.buttonWithIcon {
     padding: 5px;
-    margin: 15px;
+    margin: 5px;
     cursor: pointer;
     background-color: white;
     border-radius: 5px;
     border: 2px black solid;
+    height: min-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.playgroundIcon {
-    padding: 0px;
+.buttonWithIcon img {
+    width: 12px;
+    height: 12px;
     margin: 0px;
-    width: 32px;
-    height: 32px;
+    margin-right: 5px;
 }
 
-.playgroundAdd .playgroundIcon {
-    margin-bottom: -4px;
+.buttonWithIcon p {
+    white-space: nowrap;
+    margin: 0px;
+    font-size: 12px;
 }
 
 #playgroundWillLink {
@@ -75,30 +85,11 @@ body {
 
 #playgroundPropertyEditor {
     height: 100%;
-    border-top: 3px black dashed;
-    border-bottom: 3px black dashed;
-}
-
-#playgroundPropertyEditor div {
+    border-top: 3px black dotted;
+    border-bottom: 3px black dotted;
     display: flex;
     flex-direction: column;
-    margin: 10px;
-}
-
-#playgroundPropertyEditor div p {
-    padding-right: 10px;
-    margin: 0px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-}
-
-#playgroundPropertyEditor div input {
-    width: calc(100% - 10px);
-}
-
-#playgroundPropertyEditor button {
-    width: 100%;
-    cursor: pointer;
+    overflow-y: scroll;
 }
 
 .center {
@@ -108,22 +99,20 @@ body {
     align-items: center;
 }
 
-#playgroundPropertyEditor div button p {
-    padding-right: 0px;
-}
-
-#playgroundDeleteButton {
-    background-color: white;
-    font-size: medium;
-    border-radius: 5px;
-    border: 2px black solid;
-}
-
-.row {
+#propertyColumn {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    width: calc(100%-20px);
 }
 
-.row button {
-    margin: 5px;
+#propertyColumn div input {
+    width: 80%;
+    border: 0px;
+    border-bottom: 1px black dashed;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
+
+#propertyColumn div p {
+    margin: 0px auto 0px auto;
 }
