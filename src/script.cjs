@@ -23,6 +23,8 @@ function play() {
     playingEnvironment ? playingEnvironment.hidden = false : null;
     editingEnvironment ? editingEnvironment.hidden = true : null;
     editing = false;
+    lastSelected = null;
+    updatePropertyViewer();
     updateView();
 }
 edit();
@@ -85,12 +87,15 @@ function dragElement(event) {
     const windowHeight = parseFloat(window.getComputedStyle(document.getElementsByClassName('playgroundEditModeSideBar')[0]).height);
 
     elementDragging.style.left = clamp(event.clientX - (elementWidth / 2), 0, windowWidth - elementWidth) + 'px';
-    elementDragging.style.top = clamp(event.clientY - (elementHeight / 2), 0, windowHeight - elementHeight) + 'px';
+    elementDragging.style.top = clamp(event.clientY - (elementHeight / 2), 0, windowHeight - elementHeight) - 2 + 'px';
 }
 
-function updatePropertyViewer() {
+let searchInput = "";
+function updatePropertyViewer(selectSearchBox = false) {
     const propertyViewer = document.getElementById('playgroundPropertyEditor');
     propertyViewer.innerHTML = '';
+
+    if (!lastSelected) { return null }
 
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('buttonWithIcon');
@@ -104,40 +109,94 @@ function updatePropertyViewer() {
     }
     propertyViewer.appendChild(deleteButton)
 
+    const searchBox = document.createElement('input');
+    searchBox.id = 'propertySearchBar';
+    searchBox.type = 'text';
+    searchBox.value = searchInput;
+    searchBox.placeholder = 'Search';
+    searchBox.title = 'Search properties. Can also be used to reset the property viewer: just input something';
+    searchBox.oninput = (event) => {
+        searchInput = event.target.value; updatePropertyViewer(true)
+    }
+    propertyViewer.appendChild(searchBox);
+    selectSearchBox ? searchBox.focus() : null;
+
     const propertiesToHighlight = [
-        { key: 'innerHTML', label: 'Text', canBeNull: false },
-        { key: 'style.color', label: 'Color', canBeNull: true },
-        { key: 'style.fontSize', label: 'Font Size', canBeNull: true },
-        { key: 'style.padding', label: 'Padding', canBeNull: true },
-        { key: 'style.border', label: 'Border', canBeNull: true },
-        { key: 'style.zIndex', label: 'Z-Index', canBeNull: true },
-        { key: 'src', label: 'Source', canBeNull: true },
-        { key: 'width', label: 'Width (px)', canBeNull: true },
-        { key: 'style.rotate', label: 'Rotate', canBeNull: true }
-        //    { key: 'attributes.onclick', label: 'On Click (JS)', canBeNull: true }
+        { key: ['innerHTML'], label: 'Text' },
+        { key: ['style', 'color'], label: 'Color' },
+        { key: ['style', 'backgroundColor'], label: 'Background Color'},
+        { key: ['style', 'fontSize'], label: 'Font Size' },
+        { key: ['style', 'padding'], label: 'Padding' },
+        { key: ['style', 'border'], label: 'Border' },
+        { key: ['style', 'zIndex'], label: 'Z-Index' },
+        { key: ['src'], label: 'Source' },
+        { key: ['style', 'width'], label: 'Width' },
+        { key: ['style', 'height'], label: 'Height' },
+        { key: ['style', 'rotate'], label: 'Rotate' },
+        { key: ['style', 'left'], label: 'X position'},
+        { key: ['style', 'top'], label: 'Y position' },
     ]
 
     const propertiesColumn = document.createElement('div');
     propertiesColumn.id = 'propertyColumn';
 
-    propertiesToHighlight.forEach((p) => {
+    const createPropertyInput = (p) => {
+        const propertyValue = getProperty(lastSelected, p.key);
+        if (searchInput && 
+            !(p.key.join('.').toLowerCase().includes(searchInput.toLowerCase()) 
+            || p.label.toLowerCase().includes(searchInput.toLowerCase())
+            || (
+                propertyValue &&
+                propertyValue.toString &&
+                propertyValue.toString().toLowerCase().includes(searchInput.toLowerCase()
+            )))
+        ) {
+            return false;
+        }   
+
         const label = document.createElement('p');
         label.innerHTML = p.label;
-        label.title = `element.${p.key}`;
+        label.title = `element.${p.key.join('.')}`;
 
         const input = document.createElement('input');
         input.type = 'text';
-        input.value = eval(`lastSelected.${p.key}`);
+        input.value = propertyValue;
+        input.key = p.key;
         input.oninput = (event) => {
-            // I'm embarrassed  to push this :sob:
-            (p.canBeNull || event.target.value != '') ? eval(`lastSelected.${p.key} = '${event.target.value.replaceAll('\\', "\\").replaceAll("'", "\\'")}'`) : null;
+            setProperty(lastSelected, event.target.key, event.target.value);
         }
 
         const container = document.createElement('div');
         container.appendChild(label)
         container.appendChild(input)
         propertiesColumn.appendChild(container)
-    })
+    }
+
+    const basicSectionLabel = document.createElement('em');
+    basicSectionLabel.innerHTML = "Basic options";
+    basicSectionLabel.title = "Options below are commonly used HTML properties of the element. Some are designed for specific elements and will not work on others. Functionality is not guaranteed (as with the rest of this site)";
+    basicSectionLabel.style.cursor = "help";
+    basicSectionLabel.style.fontSize = "small";
+    basicSectionLabel.style.marginTop = '10px';
+    basicSectionLabel.style.marginBottom = '5px';
+    propertiesColumn.appendChild(basicSectionLabel);
+
+
+    propertiesToHighlight.forEach((p) => createPropertyInput(p))
+
+    const advancedSectionLabel = document.createElement('em');
+    advancedSectionLabel.innerHTML = "Advanced options";
+    advancedSectionLabel.title = "Options below are all HTML properties of the element. Functionality is not guaranteed (as with the rest of this site)";
+    advancedSectionLabel.style.cursor = "help";
+    advancedSectionLabel.style.fontSize = "small";
+    advancedSectionLabel.style.marginTop = '10px';
+    advancedSectionLabel.style.marginBottom = '5px';
+    propertiesColumn.appendChild(advancedSectionLabel)
+
+    listProperties(lastSelected).forEach(p => {
+        createPropertyInput({ key: p, label: p.join('.') })
+    });
+
     propertyViewer.appendChild(propertiesColumn);
 }
 
@@ -145,8 +204,8 @@ function addElement(tag, attributes = {}, innerHTML = "", selectElement = false)
     let e = document.createElement(tag);
     e.innerHTML = innerHTML;
 
-    for (let attribute in attributes) {
-        setPath(e, attribute, attributes[attribute]);
+    for (let attribute of attributes) {
+        e = setProperty(e, attribute.key, attribute.value);
     }
     e.style.position = 'absolute';
 
@@ -155,16 +214,67 @@ function addElement(tag, attributes = {}, innerHTML = "", selectElement = false)
     selectElement ? updatePropertyViewer() : null;
 }
 
-const addText = () => addElement('p', { 'style.margin': '0px' }, 'Demo Text', true);
-const addButton = () => addElement('button', {}, 'Demo Button', true);
-const addImage = () => addElement('img', { 'width': 300, 'draggable': 'false', 'src': 'null', 'ondragstart': () => { return false } }, 'Demo Image', true);
+const addText = () => addElement('p', [
+    { key: ['style', 'margin'], value: '0px' }
+], 'Demo Text', true);
+const addButton = () => addElement('button', [], 'Demo Button', true);
+const addImage = () => addElement('img', [
+    { key: ['width'], value: '300' },
+    { key: ['draggable'], value: 'false' },
+    { key: ['src'], value: 'null' },
+    { key: ['ondragstart'], value: () => { return false } }
+], 'Demo Image', true);
 const addCustom = () => {
     const tag = window.prompt('Element tag name?');
-    addElement(tag, {}, tag, true);
+    tag ? addElement(tag, [], tag, true) : null;
 }
 
+const setProperty = (obj, propertyKey, propertyValue, prefix = []) => {
+    // Next directory to go into to follow key
+    const nextDir = propertyKey.slice(0, -1)[prefix.length];
+    // If directory doesn't exist (at the end), set property and return new object
+    if (nextDir === undefined) {
+        obj[propertyKey.slice(-1)[0]] = propertyValue;
+        return obj;
+    } else {
+        // If next directory doesn't exist, create it
+        typeof obj[nextDir] !== 'object' ? obj[nextDir] = {} : null;
 
-// stolen function
-const setPath = (object, path, value) => path
-    .split('.')
-    .reduce((o, p, i) => o[p] = path.split('.').length === ++i ? value : o[p] || {}, object)
+        // New prefix
+        const newPrefix = prefix.concat(nextDir);
+
+        // Send "probe" to next directory to run again
+        setProperty(obj[nextDir], propertyKey, propertyValue, newPrefix);
+
+        return obj;
+    }
+}
+
+const getProperty = (obj, propertyKey, prefix = []) => {
+    const nextDir = propertyKey.slice(0, -1)[prefix.length];
+    if (nextDir === undefined) {
+        return obj[propertyKey.slice(-1)[0]];
+    } else {
+        const newPrefix = prefix.concat(nextDir);
+        return getProperty(obj[nextDir], propertyKey, newPrefix);
+    }
+}
+
+const listProperties = (obj, prefix = []) => {
+    let list = [];
+    for (let property in obj) {
+        const currentPropertyKey = prefix.concat(property);
+        if (typeof obj[property] === "object" &&
+            obj[property] != undefined &&
+            !(Array.isArray(obj[property])) &&
+            obj[property].nodeType == undefined) {
+            list = list.concat(listProperties(
+                obj[property], currentPropertyKey
+            ))
+        } else {
+            list.push(currentPropertyKey)
+        }
+    }
+    list.length === 0 ? list = [prefix] : null;
+    return list;
+}

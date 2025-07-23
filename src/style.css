@@ -2,6 +2,9 @@ body {
     font-family: 'Courier New', Courier, monospace;
 }
 
+.canvas {
+    font-family: sans-serif;
+}
 
 .playgroundModeChangeButton {
     position: absolute;
@@ -44,6 +47,13 @@ body {
     top: 0px;
     bottom: 0px;
     display: flex;
+    z-index: 1000;
+}
+
+#propertySearchBar {
+    width: min-content;
+    word-break: break-word;
+    width: 80%;
 }
 
 .buttonWithIcon {
@@ -102,6 +112,7 @@ body {
 #propertyColumn {
     display: flex;
     flex-direction: column;
+    word-break: break-word;
     width: calc(100%-20px);
 }
 
