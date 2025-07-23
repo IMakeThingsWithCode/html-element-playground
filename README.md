@@ -7,9 +7,8 @@ Playground for HTML elements to be used in demonstrations
 - [x] Prototype
   - [x] Two states, edit and play
   - [x] Basic moving and adding of elements
-- [z] Element property editor
-- [x] Images
-- [ ] Tools in edit mode (pen, laser pointer, etc.)
+- [x] Element property editor
 - [ ] Importing/Exporting
+- [ ] Tools in edit mode (pen, laser pointer, etc.)
 - [ ] Scripting between elements
 - [ ] Screen capturing
