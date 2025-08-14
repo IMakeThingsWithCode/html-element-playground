@@ -97,17 +97,28 @@ function updatePropertyViewer(selectSearchBox = false) {
 
     if (!lastSelected) { return null }
 
-    const deleteButton = document.createElement('button');
-    deleteButton.classList.add('buttonWithIcon');
-    deleteButton.innerHTML = '<img class="playgroundIcon" src="./resources/icon-remove-element.png"><p>Delete</p>';
-    deleteButton.id = 'playgroundDeleteButton';
-    deleteButton.onclick = () => {
+    const makeButton = (id, src, onclick) => {
+        const b = document.createElement('img');
+        b.src = src;
+        b.id = id;
+        b.onclick = onclick;
+        b.classList.add('playgroundActionButton');
+        propertyViewer.appendChild(b)
+    }
+
+    makeButton('playgroundDeleteButton', "./resources/rm-button.svg", () => {
         playgroundElements.splice(Array.prototype.slice.call(lastSelected.parentElement.children).indexOf(lastSelected), 1);
         updateView();
         lastSelected = null;
         document.getElementById('playgroundPropertyEditor').innerHTML = '';
-    }
-    propertyViewer.appendChild(deleteButton)
+    })
+
+    makeButton('playgroundCopyButton', "./resources/cp-button.svg", () => {
+        playgroundElements.push(lastSelected.cloneNode(true));
+        playgroundElements.slice(-1)[0].style.top = '0px';
+        playgroundElements.slice(-1)[0].style.left = '0px';
+        updateView();
+    })
 
     const searchBox = document.createElement('input');
     searchBox.id = 'propertySearchBar';
@@ -124,7 +135,7 @@ function updatePropertyViewer(selectSearchBox = false) {
     const propertiesToHighlight = [
         { key: ['innerHTML'], label: 'Text' },
         { key: ['style', 'color'], label: 'Color' },
-        { key: ['style', 'backgroundColor'], label: 'Background Color'},
+        { key: ['style', 'backgroundColor'], label: 'Background Color' },
         { key: ['style', 'fontSize'], label: 'Font Size' },
         { key: ['style', 'padding'], label: 'Padding' },
         { key: ['style', 'border'], label: 'Border' },
@@ -133,7 +144,7 @@ function updatePropertyViewer(selectSearchBox = false) {
         { key: ['style', 'width'], label: 'Width' },
         { key: ['style', 'height'], label: 'Height' },
         { key: ['style', 'rotate'], label: 'Rotate' },
-        { key: ['style', 'left'], label: 'X position'},
+        { key: ['style', 'left'], label: 'X position' },
         { key: ['style', 'top'], label: 'Y position' },
     ]
 
@@ -142,17 +153,17 @@ function updatePropertyViewer(selectSearchBox = false) {
 
     const createPropertyInput = (p) => {
         const propertyValue = getProperty(lastSelected, p.key);
-        if (searchInput && 
-            !(p.key.join('.').toLowerCase().includes(searchInput.toLowerCase()) 
-            || p.label.toLowerCase().includes(searchInput.toLowerCase())
-            || (
-                propertyValue &&
-                propertyValue.toString &&
-                propertyValue.toString().toLowerCase().includes(searchInput.toLowerCase()
-            )))
+        if (searchInput &&
+            !(p.key.join('.').toLowerCase().includes(searchInput.toLowerCase())
+                || p.label.toLowerCase().includes(searchInput.toLowerCase())
+                || (
+                    propertyValue &&
+                    propertyValue.toString &&
+                    propertyValue.toString().toLowerCase().includes(searchInput.toLowerCase()
+                    )))
         ) {
             return false;
-        }   
+        }
 
         const label = document.createElement('p');
         label.innerHTML = p.label;
@@ -227,6 +238,43 @@ const addImage = () => addElement('img', [
 const addCustom = () => {
     const tag = window.prompt('Element tag name?');
     tag ? addElement(tag, [], tag, true) : null;
+}
+
+document.getElementById('playgroundAddMenu').onmouseover = (e) => { document.getElementById('playgroundAddDropdown').hidden = false };
+document.getElementById('playgroundAddMenu').onmouseout = (e) => { document.getElementById('playgroundAddDropdown').hidden = true };
+
+const exportPlayground = () => {
+    let toExport = {
+        objects: []
+    }
+
+    playgroundElements.forEach(obj => {
+        let newObj = {};
+        for (const p in obj) {
+            newObj[p] = obj[p];
+        }
+        toExport.objects.push(newObj)
+    })
+
+    console.clear()
+    console.log(JSON.stringify(toExport))
+
+    alert('JSON text in console!')
+}
+
+const importPlayground = (json) => {
+    let toImport = JSON.parse(json);
+    playgroundElements = [];
+    toImport.objects.forEach(dict => {
+        let el = document.createElement(dict.tagName);
+        for (const attr in dict) {
+            try {
+                el[attr] = dict[attr]
+            } catch (err) { console.warn([attr, err]) }
+        }
+        playgroundElements.push(el)
+    })
+    updateView();
 }
 
 const setProperty = (obj, propertyKey, propertyValue, prefix = []) => {

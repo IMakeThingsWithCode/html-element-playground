@@ -6,28 +6,40 @@ body {
     font-family: sans-serif;
 }
 
+.playgroundActionButton {
+    width: 70px;
+    height: 30px;
+    align-self: center;
+    margin: 5px 0px;
+    cursor: pointer;
+}
+
 .playgroundModeChangeButton {
     position: absolute;
     top: 0px;
     right: 0px;
-    background-color: white;
-    border-radius: 5px;
-    border: 2px black solid;
+    height: 30px;
+    width: 100px;
+    margin: 15px;
     cursor: pointer;
     display: flex;
-    flex-direction: row;
-    font-size: small;
+}
+
+#playgroundAddMenu {
+    margin: 15px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #playgroundEditingModeChangeButton {
     position: relative;
-    margin-right: 15px;
-    height: min-content;
-    margin: 15px;
 }
 
-#playgroundPlayingModeChangeButton {
-    margin: 15px
+#playgroundAddButton {
+    width: 70px;
+    height: 91px;
+    cursor: cell;
 }
 
 .playgroundEditingPane {
@@ -37,8 +49,9 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    width: min-content;
+    width: 100px;
     padding-left: 3px;
+    background-color:gainsboro;
 }
 
 .playgroundEditModeSideBar {
@@ -56,9 +69,9 @@ body {
     width: 80%;
 }
 
-.buttonWithIcon {
+.addButton {
     padding: 5px;
-    margin: 5px;
+    margin: 7px 0px;
     cursor: pointer;
     background-color: white;
     border-radius: 5px;
@@ -67,25 +80,21 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+    width: 100%;
 }
 
-.buttonWithIcon img {
-    width: 12px;
-    height: 12px;
-    margin: 0px;
-    margin-right: 5px;
-}
-
-.buttonWithIcon p {
+.addButton p {
     white-space: nowrap;
     margin: 0px;
     font-size: 12px;
+    text-align: center;
+    width: 100%;
 }
 
 #playgroundWillLink {
     text-decoration-line: underline;
     text-decoration-style: wavy;
-    color: skyblue;
+    color: red;
 }
 
 #playgroundWillLink:hover {
@@ -113,7 +122,7 @@ body {
     display: flex;
     flex-direction: column;
     word-break: break-word;
-    width: calc(100%-20px);
+    width: 100px;
 }
 
 #propertyColumn div input {

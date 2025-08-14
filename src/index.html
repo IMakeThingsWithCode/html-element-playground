@@ -11,12 +11,29 @@
 
         </div>
         <aside class="playgroundEditModeSideBar">
-            <button title="Switch to Play mode" id="playgroundEditingModeChangeButton"
-                class="buttonWithIcon playgroundModeChangeButton" onclick="play()">
-                <img class="playgroundIcon" src="./resources/icon-play.png"><br>Play
-            </button>
+            <img src="./resources/play-button.svg" title="Switch to Play mode" id="playgroundEditingModeChangeButton"
+                class="playgroundModeChangeButton" onclick="play()" />
             <div class="playgroundEditingPane">
-                <button title="Add Text" onclick="addText()" class="buttonWithIcon">
+                <div id="playgroundAddMenu">
+                    <img src="./resources/add-button.svg" id="playgroundAddButton" width="75" height="97.5">
+                    <div id="playgroundAddDropdown">
+                        <button title="Add Text" onclick="addText()" class="addButton">
+                            <p>Text</p>
+                        </button>
+                        <button title="Add Image" onclick="addImage()" class="addButton">
+                            <p>Image</p>
+                        </button>
+                        <button title="Add Button" onclick="addButton()" class="addButton">
+                            <p>Button</p>
+                        </button>
+                        <button title="Add Custom" onclick="addCustom()" class="addButton">
+                            <p>Custom</p>
+                        </button>
+                    </div>
+                </div>
+
+
+                <!-- <button title="Add Text" onclick="addText()" class="buttonWithIcon">
                     <img class="playgroundIcon" src="./resources/icon-add-text.png">
                     <p>Add Text</p>
                 </button><br>
@@ -31,7 +48,7 @@
                 <button title="Add Custom" onclick="addCustom()" class="buttonWithIcon">
                     <img class="playgroundIcon" src="./resources/icon-add-custom.png">
                     <p>Add Custom</p>
-                </button>
+                </button> -->
                 <div id="playgroundPropertyEditor">
 
                 </div>
@@ -53,10 +70,8 @@
         <div class="canvas">
 
         </div>
-        <button title="Switch to Edit mode" id="playgroundPlayingModeChangeButton"
-            class="buttonWithIcon playgroundModeChangeButton" onclick="edit()">
-            <img class="playgroundIcon" src="./resources/icon-edit.png"><br>Edit
-        </button>
+        <img src="./resources/edit-button.svg" title="Switch to Edit mode" id="playgroundPlayingModeChangeButton"
+            class="playgroundModeChangeButton" onclick="edit()" />
     </div>
 </body>
 <script src="./script.cjs"></script>
