@@ -109,6 +109,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
+    padding-top: 10px;
 }
 
 .center {
